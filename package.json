@@ -1,0 +1,30 @@
+{
+  "name": "telemetry-events-trace",
+  "version": "0.0.0",
+  "description": "Helper for creating and emitting telemetry trace events.",
+  "scripts": {
+    "assert-latest-node": "(node -v | grep -q ${npm_package_scriptvars_latest_node}) || (echo \"Expected node version ${npm_package_scriptvars_latest_node}, got $(node -v)\" && exit 1)",
+    "inject-examples": "node scripts/injectExamples.js",
+    "readme": "node examples/readme.js"
+  },
+  "scriptvars": {
+    "latest_node": "v8.1.2"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "urlsafe-base64": "1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:tristanls/telemetry-events-trace.git"
+  },
+  "keywords": [
+    "telemetry",
+    "events",
+    "tracing"
+  ],
+  "contributors": [
+    "Tristan Slominski <tristan.slominski@gmail.com>"
+  ],
+  "license": "MIT"
+}
