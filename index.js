@@ -99,6 +99,20 @@ TraceTelemetryEvents.Span.prototype.span = function span(name, tags = {}, baggag
     );
 };
 
+TraceTelemetryEvents.Span.prototype.tag = function tag(key, value)
+{
+    const self = this;
+    self._tags[key] = value;
+    return self;
+};
+
+TraceTelemetryEvents.Span.prototype.tags = function tags(tags)
+{
+    const self = this;
+    self._tags = Object.assign(self._tags, tags);
+    return self;
+};
+
 TraceTelemetryEvents.prototype.extract = function extract(type, carrier)
 {
     const self = this;
@@ -114,8 +128,7 @@ TraceTelemetryEvents.prototype.extract = function extract(type, carrier)
                     telemetry: self._telemetry
                 }
             );
-            span.finish = () => {}; // can't finish remote span
-            return span;
+            break;
         case "text_map":
             span = new TraceTelemetryEvents.Span(
                 {
@@ -125,11 +138,12 @@ TraceTelemetryEvents.prototype.extract = function extract(type, carrier)
                     telemetry: self._telemetry
                 }
             );
-            span.finish = () => {}; // can't finish remote span
-            return span;
+            break;
         default:
             return null;
     }
+    span.finish = () => {}; // can't finish remote span
+    return span;
 }
 
 TraceTelemetryEvents.prototype.trace = function trace(name, tags = {}, baggage = {}, start = new Date())

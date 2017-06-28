@@ -62,12 +62,19 @@ let childSpan1 = rootSpan2.childSpan("childSpan1", {db: "020"});
 let childSpan2 = rootSpan2.childSpan("childSpan2", {db: "021"});
 let childSpan3 = childSpan1.childSpan("childSpan3");
 let childSpan4 = childSpan2.followingSpan("childSpan4", {consumer: "me"});
+childSpan4.tags(
+    {
+        "some": "tag",
+        "some_other": "tag"
+    }
+);
 
 let headers = childSpan3.inject("http_headers", {});
 console.log(headers);
 let extractedSpan = tracing.extract("http_headers", headers);
 
 let childSpan5 = extractedSpan.childSpan("childSpan5");
+childSpan5.tag("error", true);
 
 setTimeout(() => childSpan3.finish(), 10);
 setTimeout(() => childSpan2.finish(), 11);
@@ -98,6 +105,8 @@ No tests at this time.
   * [span.finish(\[finish\])](#spanfinishfinish)
   * [span.followingSpan(name, \[tags\], \[baggage\], \[start\])](#spanfollowingspanname-tags-baggage-start)
   * [span.inject(type, carrier)](#spaninjecttype-carrier)
+  * [span.tag(key, value)](#spantagkey-value)
+  * [span.tags(tags)](#spantagstags)
 
 ### new TraceTelemetryEvents(config)
 
@@ -159,6 +168,21 @@ Creates a child span that has a `followsFrom` reference to the `span`.
   * Return: `carrier` with injected span information.
 
 Injects `span` information into the `carrier`.
+
+### span.tag(key, value)
+
+  * `key`: _String_ Tag key.
+  * `value`: _String_ Tag value.
+  * Return: _TraceTelemetryEvents.Span_ Span where tags were updated.
+
+Creates or updates a tag in a span.
+
+### span.tags(tags)
+
+  * `tags`: _Object_ Keys and values of tags to create or update.
+  * Return: _TraceTelemetryEvents.Span_ Span where tags were updated.
+
+Creates or updates tags in a span.
 
 ## Releases
 

@@ -30,12 +30,19 @@ let childSpan1 = rootSpan2.childSpan("childSpan1", {db: "020"});
 let childSpan2 = rootSpan2.childSpan("childSpan2", {db: "021"});
 let childSpan3 = childSpan1.childSpan("childSpan3");
 let childSpan4 = childSpan2.followingSpan("childSpan4", {consumer: "me"});
+childSpan4.tags(
+    {
+        "some": "tag",
+        "some_other": "tag"
+    }
+);
 
 let headers = childSpan3.inject("http_headers", {});
 console.log(headers);
 let extractedSpan = tracing.extract("http_headers", headers);
 
 let childSpan5 = extractedSpan.childSpan("childSpan5");
+childSpan5.tag("error", true);
 
 setTimeout(() => childSpan3.finish(), 10);
 setTimeout(() => childSpan2.finish(), 11);
