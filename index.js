@@ -92,7 +92,7 @@ TraceTelemetryEvents.Span.prototype.span = function span(name, tags = {}, baggag
             traceId: self._traceId,
             start,
             tags,
-            baggage: Object.assign(self._baggage, baggage),
+            baggage: Object.assign({}, self._baggage, baggage),
             references,
             telemetry: self._telemetry
         }
@@ -120,27 +120,35 @@ TraceTelemetryEvents.prototype.extract = function extract(type, carrier)
     switch (type)
     {
         case "http_headers":
+            if (!carrier["X-TRACE-ID"] || !carrier["X-TRACE-SPAN-ID"])
+            {
+                return undefined;
+            }
             span = new TraceTelemetryEvents.Span(
                 {
-                    traceId: carrier['X-TRACE-ID'],
-                    spanId: carrier['X-TRACE-SPAN-ID'],
-                    baggage: JSON.parse(Buffer.from(carrier['X-TRACE-BAGGAGE'], "base64")),
+                    traceId: carrier["X-TRACE-ID"],
+                    spanId: carrier["X-TRACE-SPAN-ID"],
+                    baggage: carrier["X-TRACE-BAGGAGE"] ? JSON.parse(Buffer.from(carrier["X-TRACE-BAGGAGE"], "base64")) : {},
                     telemetry: self._telemetry
                 }
             );
             break;
         case "text_map":
+            if (!carrier.traceId || !carrier.spanId)
+            {
+                return undefined;
+            }
             span = new TraceTelemetryEvents.Span(
                 {
                     traceId: carrier.traceId,
                     spanId: carrier.spanId,
-                    baggage: JSON.parse(carrier.baggage),
+                    baggage: carrier.baggage ? JSON.parse(carrier.baggage) : {},
                     telemetry: self._telemetry
                 }
             );
             break;
         default:
-            return null;
+            return undefined;
     }
     span.finish = () => {}; // can't finish remote span
     return span;

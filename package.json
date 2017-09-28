@@ -5,12 +5,17 @@
   "scripts": {
     "assert-latest-node": "(node -v | grep -q ${npm_package_scriptvars_latest_node}) || (echo \"Expected node version ${npm_package_scriptvars_latest_node}, got $(node -v)\" && exit 1)",
     "inject-examples": "node scripts/injectExamples.js",
-    "readme": "node examples/readme.js"
+    "readme": "node examples/readme.js",
+    "test": "npm run assert-latest-node && npm list 1>/dev/null && jest -w 1"
   },
   "scriptvars": {
-    "latest_node": "v8.1.2"
+    "latest_node": "v8.6.0"
   },
   "main": "index.js",
+  "devDependencies": {
+    "jest": "21.2.1",
+    "telemetry-events": "1.1.0"
+  },
   "dependencies": {
     "urlsafe-base64": "1.0.0"
   },
