@@ -1,6 +1,6 @@
 {
   "name": "telemetry-events-trace",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Helper for creating and emitting telemetry trace events.",
   "scripts": {
     "assert-latest-node": "(node -v | grep -q ${npm_package_scriptvars_latest_node}) || (echo \"Expected node version ${npm_package_scriptvars_latest_node}, got $(node -v)\" && exit 1)",
