@@ -9,12 +9,12 @@
     "test": "npm run assert-latest-node && npm list 1>/dev/null && jest -w 1"
   },
   "scriptvars": {
-    "latest_node": "v8.6.0"
+    "latest_node": "v12.9.1"
   },
   "main": "index.js",
   "devDependencies": {
-    "jest": "21.2.1",
-    "telemetry-events": "1.1.0"
+    "jest": "24.9.0",
+    "telemetry-events": "2.0.0"
   },
   "dependencies": {
     "urlsafe-base64": "1.0.0"
